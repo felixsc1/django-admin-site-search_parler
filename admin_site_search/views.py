@@ -130,10 +130,10 @@ class AdminSiteSearchView:
                 return True
         return False
 
-    def match_objects(
-        self, query: str, model_class: Model, model_fields: List[Field]
-    ) -> QuerySet:
-        """Returns the QuerySet[:5] after performing an OR filter across all Char fields in the model."""
+    def match_objects(self, query: str, model_class: Model, model_fields: List[Field]) -> QuerySet:
+        """Returns the QuerySet[:5] after performing an OR filter across all Char fields in the model.
+           Modified to get parler translatable fields.
+        """
         filters = Q()
 
         for field in model_fields:
@@ -141,10 +141,19 @@ class AdminSiteSearchView:
             if filter_:
                 filters |= filter_
 
-        if filters:
-            results = model_class.objects.filter(filters)[:5]
+        if hasattr(model_class, "_parler_meta"):
+            # The model is translatable
+            translated_fields = model_class._parler_meta.get_translated_fields()
+            translated_filters = Q()
+            for field_name in translated_fields:
+                filter_ = Q(**{f"translations__{field_name}__icontains": query})
+                translated_filters |= filter_
+            results = model_class.objects.translated().filter(translated_filters)[:5]
         else:
-            results = model_class.objects.none()
+            if filters:
+                results = model_class.objects.filter(filters)[:5]
+            else:
+                results = model_class.objects.none()
 
         return results
 
