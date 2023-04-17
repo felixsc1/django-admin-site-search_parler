@@ -1,5 +1,11 @@
 # django-admin-site-search
 
+## Changes in this fork
+
+The only change here is that the views.py file was modified to support django-parler translatable models.
+Search will now return translatable objects (in the currently selected language).
+
+
 [![Test](https://github.com/ahmedaljawahiry/django-admin-site-search/actions/workflows/test.yaml/badge.svg)](https://github.com/ahmedaljawahiry/django-admin-site-search/actions/workflows/test.yaml)
 [![Lint](https://github.com/ahmedaljawahiry/django-admin-site-search/actions/workflows/lint.yaml/badge.svg)](https://github.com/ahmedaljawahiry/django-admin-site-search/actions/workflows/lint.yaml)
 [![PyPI](https://github.com/ahmedaljawahiry/django-admin-site-search/actions/workflows/pypi.yaml/badge.svg)](https://github.com/ahmedaljawahiry/django-admin-site-search/actions/workflows/pypi.yaml)
